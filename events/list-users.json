@@ -1,0 +1,11 @@
+{
+  "httpMethod": "GET",
+  "path": "/users",
+  "queryStringParameters": {
+    "limit": "5",
+    "offset": "0"
+  },
+  "headers": {
+    "Content-Type": "application/json"
+  }
+}

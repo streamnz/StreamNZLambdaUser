@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: User CRUD Lambda with API Gateway
+
+Parameters:
+  DBPassword:
+    Type: String
+    NoEcho: true
+    Description: Database password
+    Default: ""
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: java17
+    Environment:
+      Variables:
+        DB_URL: "jdbc:mysql://ai-game.cfkuy6mi4nng.ap-southeast-2.rds.amazonaws.com:3306/ai-game?useSSL=true&serverTimezone=UTC&characterEncoding=utf8"
+        DB_USER: "chenghao"
+        DB_PASSWORD: !Ref DBPassword
+
+Resources:
+  UserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: com.example.lambda.UserHandler::handleRequest
+      FunctionName: user-crud-lambda
+      Description: User CRUD operations Lambda function
+      # VPC Configuration (uncomment and configure as needed)
+      # VpcConfig:
+      #   SecurityGroupIds:
+      #     - sg-xxxxxxxxx
+      #   SubnetIds:
+      #     - subnet-xxxxxxxxx
+      #     - subnet-xxxxxxxxx
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users
+            Method: ANY
+            RestApiId: !Ref UserApi
+        ApiWithId:
+          Type: Api
+          Properties:
+            Path: /users/{id}
+            Method: ANY
+            RestApiId: !Ref UserApi
+
+  UserApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: user-api
+      Description: User CRUD API
+      StageName: prod
+      Cors:
+        AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
+        AllowCredentials: "'true'"
+
+Outputs:
+  UserFunction:
+    Description: "User Lambda Function ARN"
+    Value: !GetAtt UserFunction.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-UserFunction"
+  
+  UserApi:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${UserApi}.execute-api.${AWS::Region}.amazonaws.com/prod/"
+    Export:
+      Name: !Sub "${AWS::StackName}-UserApi"
+  
+  UserFunctionRole:
+    Description: "Implicit IAM Role created for User function"
+    Value: !GetAtt UserFunctionRole.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-UserFunctionRole"

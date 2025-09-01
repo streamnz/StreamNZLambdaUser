@@ -1,0 +1,41 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "IAMRoleCreation",
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateRole",
+                "iam:AttachRolePolicy",
+                "iam:PutRolePolicy",
+                "iam:GetRole",
+                "iam:ListAttachedRolePolicies"
+            ],
+            "Resource": [
+                "arn:aws:iam::463470976263:role/user-lambda-execution-role",
+                "arn:aws:iam::463470976263:role/user-lambda-*"
+            ]
+        },
+        {
+            "Sid": "LambdaCreation",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:CreateFunction",
+                "lambda:UpdateFunctionCode",
+                "lambda:UpdateFunctionConfiguration",
+                "lambda:AddPermission",
+                "lambda:GetFunction",
+                "lambda:ListFunctions"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "APIGatewayCreation",
+            "Effect": "Allow",
+            "Action": [
+                "apigatewayv2:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}

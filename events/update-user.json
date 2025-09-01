@@ -1,0 +1,8 @@
+{
+  "httpMethod": "PUT",
+  "path": "/users/1",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"username\":\"updated_user\",\"email\":\"updated@example.com\",\"password\":\"newpassword123\",\"score\":200,\"wallet_address\":\"0xabcdef1234567890\",\"wallet_type\":\"ETH\"}"
+}

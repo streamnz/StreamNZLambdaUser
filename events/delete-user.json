@@ -1,0 +1,7 @@
+{
+  "httpMethod": "DELETE",
+  "path": "/users/1",
+  "headers": {
+    "Content-Type": "application/json"
+  }
+}

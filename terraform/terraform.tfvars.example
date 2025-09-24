@@ -1,0 +1,31 @@
+# Example Terraform variables file
+# Copy this file to terraform.tfvars and update the values
+
+# AWS Configuration
+aws_region = "ap-southeast-2"
+
+# Lambda Configuration
+function_name = "user-crud-lambda"
+lambda_timeout = 30
+lambda_memory_size = 512
+
+# API Gateway Configuration
+api_name = "user-api"
+stage_name = "prod"
+
+# Database Configuration
+db_url = "jdbc:mysql://ai-game.cfkuy6mi4nng.ap-southeast-2.rds.amazonaws.com:3306/ai-game?useSSL=true&serverTimezone=UTC&characterEncoding=utf8"
+db_user = "chenghao"
+# IMPORTANT: Set your actual database password here
+db_password = "YOUR_DATABASE_PASSWORD"
+
+# Logging Configuration
+log_retention_days = 14
+
+# Tags
+tags = {
+  Project     = "UserLambda"
+  Environment = "Production"
+  ManagedBy   = "Terraform"
+  Owner       = "YourName"
+}

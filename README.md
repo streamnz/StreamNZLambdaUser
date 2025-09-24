@@ -143,7 +143,76 @@ java -cp target/user-lambda-1.0.0-shaded.jar com.example.lambda.util.Db
 
 ## Deployment
 
-### Option 1: Using AWS SAM (Recommended)
+### Option 1: Using Terraform (Recommended - Infrastructure as Code)
+
+This is the **recommended approach** for production deployments as it provides better state management, version control, and reproducibility.
+
+#### Prerequisites
+
+1. **Install Terraform**:
+   ```bash
+   # macOS
+   brew install terraform
+   
+   # Or download from https://terraform.io/downloads
+   ```
+
+2. **Configure AWS credentials**:
+   ```bash
+   aws configure
+   ```
+
+#### Quick Deployment
+
+```bash
+# Navigate to terraform directory
+cd terraform
+
+# Run the deployment script
+./deploy.sh
+```
+
+#### Manual Terraform Deployment
+
+```bash
+# Navigate to terraform directory
+cd terraform
+
+# Initialize Terraform
+terraform init
+
+# Review the plan
+terraform plan
+
+# Apply the configuration
+terraform apply
+```
+
+#### Configuration
+
+1. **Copy and edit variables**:
+   ```bash
+   cp terraform.tfvars.example terraform.tfvars
+   # Edit terraform.tfvars with your actual values
+   ```
+
+2. **Key variables to update**:
+   - `db_password`: Your database password
+   - `aws_region`: Your preferred AWS region
+   - `tags`: Add your project tags
+
+#### Benefits of Terraform Approach
+
+- ✅ **Infrastructure as Code**: Version controlled infrastructure
+- ✅ **State Management**: Track resource changes and dependencies
+- ✅ **Rollback Capability**: Easy to revert changes
+- ✅ **Environment Management**: Easy to deploy to multiple environments
+- ✅ **Team Collaboration**: Shared infrastructure state
+- ✅ **Automation**: CI/CD integration ready
+
+For detailed Terraform documentation, see [terraform/README.md](terraform/README.md).
+
+### Option 2: Using AWS SAM
 
 #### 1. Build SAM Application
 
@@ -176,7 +245,16 @@ Or check the CloudFormation outputs:
 aws cloudformation describe-stacks --stack-name user-lambda-stack --query 'Stacks[0].Outputs[?OutputKey==`UserApi`].OutputValue' --output text
 ```
 
-### Option 2: Manual Deployment
+### Option 3: Using Shell Scripts (Legacy)
+
+The project includes shell scripts for deployment, but these are now considered legacy:
+
+- `deploy-auto.sh` - Full automated deployment
+- `deploy-simple-auto.sh` - Simplified deployment
+
+**Note**: These scripts are maintained for backward compatibility but Terraform is recommended for new deployments.
+
+### Option 4: Manual Deployment
 
 #### 1. Create Lambda Function
 
@@ -316,8 +394,23 @@ aws lambda update-function-configuration \
 ```
 /
 ├── pom.xml                          # Maven configuration
-├── template.yaml                    # SAM template
+├── template.yaml                    # SAM template (legacy)
 ├── README.md                        # This file
+├── terraform/                       # Terraform IaC configuration
+│   ├── main.tf                     # Main Terraform configuration
+│   ├── variables.tf                # Variable definitions
+│   ├── outputs.tf                  # Output definitions
+│   ├── terraform.tfvars.example    # Example variables file
+│   ├── terraform.tfvars           # Actual variables (not in git)
+│   ├── deploy.sh                   # Deployment script
+│   ├── destroy.sh                  # Destroy script
+│   ├── .gitignore                  # Git ignore rules
+│   └── README.md                   # Terraform documentation
+├── deploy-auto.sh                  # Legacy deployment script
+├── deploy-simple-auto.sh           # Legacy deployment script
+├── env.json                        # Environment variables (not in git)
+├── env.example.json                # Example environment variables
+├── samconfig.toml                  # SAM configuration
 ├── sql/
 │   └── users.sql                   # Database schema
 └── src/main/java/com/example/lambda/

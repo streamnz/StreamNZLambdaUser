@@ -26,6 +26,12 @@ samconfig.toml
 function.zip
 deployment/
 
+# Terraform
+terraform/lambda_function.zip
+terraform/.terraform/
+terraform/terraform.tfstate*
+terraform/.terraform.lock.hcl
+
 # Sensitive files
 env.json
 *.env

@@ -38,26 +38,7 @@ public class UserHandler implements RequestHandler<APIGatewayV2HTTPEvent, APIGat
         String httpMethod = event.getRequestContext().getHttp().getMethod();
         String path = event.getRawPath();
         
-        // Add debug logging to see what API Gateway is sending
-        logger.info("=== API Gateway Event Debug ===");
-        logger.info("HTTP Method: {}", httpMethod);
-        logger.info("Path: {}", path);
-        logger.info("Raw Path: {}", event.getRawPath());
-        logger.info("Path Parameters: {}", event.getPathParameters());
-        logger.info("Query String Parameters: {}", event.getQueryStringParameters());
-        logger.info("Headers: {}", event.getHeaders());
-        logger.info("Body: {}", event.getBody());
-        logger.info("================================");
-        
-        // Add null checks
-        if (httpMethod == null) {
-            httpMethod = "GET";
-        }
-        if (path == null) {
-            path = "/";
-        }
-        
-        logger.info("Received request: {} {}, path: {}", httpMethod, path, path);
+        logger.info("Received request: {} {}", httpMethod, path);
         
         try {
             // Route the request based on HTTP method and path
@@ -79,13 +60,6 @@ public class UserHandler implements RequestHandler<APIGatewayV2HTTPEvent, APIGat
      * Route the request to appropriate handler based on HTTP method and path
      */
     private APIGatewayV2HTTPResponse routeRequest(String httpMethod, String path, APIGatewayV2HTTPEvent event) {
-        // Add null checks
-        if (httpMethod == null) {
-            httpMethod = "GET";
-        }
-        if (path == null) {
-            path = "/";
-        }
         
         switch (httpMethod) {
             case "POST":
